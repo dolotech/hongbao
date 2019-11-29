@@ -1,0 +1,16 @@
+[[Cookies]]
+Address="111.67.205.xx:8283"
+API="jypdqxu.rest:443"
+Cookie=["dfdni0infjgs475dfao9us91"]
+
+#[[Cookies]]
+#Address="111.67.205.xx:8283"
+#API="aip.abc.com"
+#Cookie=["abc","asdfasdf"]
+#
+
+[MysqlDB]
+Host = '103.34.43.234:3306'
+User = 'root'
+Password = '3434434'
+DBName = 'hongbao'
