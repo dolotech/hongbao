@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 	jsoniter "github.com/json-iterator/go"
 	"log"
+	"math/rand"
 	"net/url"
 	"strconv"
 	"sync"
@@ -56,40 +57,56 @@ func Websocet(cookies cfg.Cookies) {
 			glog.Info("read:", err)
 			return
 		}
-		any := jsoniter.Get(message)
 
-		if any.Get("code").ToString() == "ok" {
-			d := &Resp{}
-			any.ToVal(d)
+		r := rand.Int31n(int32(len(cookies.Cookie)))
 
-			honbao := d.Honbao
-			honbaos := d.Honbaos
-			go honbao.Save()
-			go honbaos.Save()
+		ParseData(message,	cookies.API,cookies.Cookie[r])
+	}
+}
 
-			for i := 0; i < len(honbao); i++ {
-				//v := honbao[i]
-				//抢包处理
-				/*if v.Number == "6" && v.GetMoney()<=20{
-					if _, ok := syc.Load(v.Id); !ok {
-						syc.Store(v.Id, struct{}{})
+func ParseData(message []byte,addr ,cookie string)  {
+	any := jsoniter.Get(message)
 
-						money := v.GetMoney()
+	if any.Get("code").ToString() == "ok" {
+		d := &Resp{}
+		any.ToVal(d)
 
-						var moneyLeft float64
-						for _, value := range honbaos {
-							if value.HbId == v.Id {
-								moneyLeft += value.GetMoney()
-							}
-						}
-						if Float(money - moneyLeft).Last() != v.Lei {
-							r := rand.Int31n(int32(len(cookies.Cookie)))
-							//time.AfterFunc(time.Millisecond*200, func() {
-								go Http(cookies.API, strconv.Itoa(v.Id), cookies.Cookie[r],v)
-							//})
-						}
+		honbao := d.Honbao
+		honbaos := d.Honbaos
+		//go honbao.Save()
+		//go honbaos.Save()
+
+		for i := 0; i < len(honbao); i++ {
+			v := honbao[i]
+			//glog.Info(v.Number)
+			count:=0
+			leiCount:=0
+			var moneyLeft float64
+			for _, value := range honbaos {
+				if value.HbId == v.Id {
+					moneyLeft += value.GetMoney()
+					count ++
+				}
+				if value.Zlei == 1&& "dbca9"!=value.Uid{
+					//glog.Info(value.Nickname,value.Uid)
+					leiCount = 1
+					break
+				}
+			}
+
+			//抢包处理
+			//if count==5{
+			if leiCount==1{
+				if _, ok := syc.Load(v.Id); !ok {
+					syc.Store(v.Id, struct{}{})
+					money := v.GetMoney()
+					if Float(money - moneyLeft).Last() != v.Lei {
+						//r := rand.Int31n(int32(len(cookies.Cookie)))
+						//time.AfterFunc(time.Millisecond*100, func() {
+							go Http(addr, strconv.Itoa(int(v.Id)),cookie,v)
+						//})
 					}
-				}*/
+				}
 			}
 		}
 	}

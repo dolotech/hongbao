@@ -5,9 +5,14 @@ import (
 	"github.com/golang/glog"
 	jsoniter "github.com/json-iterator/go"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
+	"utils/cfg"
 )
+
 func Http(addr, hbid, cookie string, item data.HonbaoTb) error {
 	/*resp, err := http.Post("http://"+addr+"/index/api/kai",
 	"application/x-www-form-urlencoded",
@@ -47,3 +52,30 @@ func Http(addr, hbid, cookie string, item data.HonbaoTb) error {
 
 	return nil
 }
+
+func GetAll(cookies cfg.Cookies) error {
+	client := &http.Client{}
+	stamp := strconv.Itoa(int(time.Now().UnixNano() / 1000000))
+	req, err := http.NewRequest("GET", "http://"+cookies.API+"/index/API/fabao?timestamp=", strings.NewReader("timestamp="+stamp))
+	if err != nil {
+		return err
+	}
+	r := rand.Int31n(int32(len(cookies.Cookie)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Cookie", "PHPSESSID="+cookies.Cookie[r])
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	ParseData(body, cookies.API, cookies.Cookie[r])
+	return nil
+}
+
+//http://hb.yqsyyly.cn/index/API/fabao?timestamp=1575099030713

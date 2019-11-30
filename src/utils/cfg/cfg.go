@@ -11,6 +11,7 @@ type Cookies struct {
 	Cookie  []string
 	Address string
 	API     string
+	Mode    int
 }
 
 type MysqlDB struct {

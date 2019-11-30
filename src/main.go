@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 	"utils/cfg"
 	"utils/db"
 )
@@ -45,11 +46,23 @@ func main() {
 	//db.Get().CreateTable(&data.HonbaoTb{})
 	s:=logic.Float(10.13)
 
+
+
 	glog.Info(s.String())
 	glog.Info(s.Last())
 
 	for _, value := range list {
-		go logic.Websocet(value)
+		if value.Mode == 0{
+			for {
+				go logic.GetAll(value)
+				time.Sleep(time.Millisecond * 500)
+			}
+		}else{
+			go logic.Websocet(value)
+		}
+
+
+
 	}
 	select {}
 }

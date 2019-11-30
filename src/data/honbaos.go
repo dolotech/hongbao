@@ -50,12 +50,7 @@ func (this *HonbaosTb) Save() error {
 	return db.Get().Model(this).Save(this).Error
 }
 
-func (this *HonbaosTbs) GetMony(hbId uint) float64 {
-	for _, value := range *this {
-		if value.HbId == hbId {
-			f, _ := strconv.ParseFloat(value.Money, 10)
-			return f
-		}
-	}
-	return 0
+func (this HonbaosTb) GetMoney() float64 {
+	i, _ := strconv.ParseFloat(this.Money, 10)
+	return i
 }
