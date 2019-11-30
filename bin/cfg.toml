@@ -1,16 +1,21 @@
 [[Cookies]]
-Address="111.67.205.xx:8283"
-API="jypdqxu.rest:443"
-Cookie=["dfdni0infjgs475dfao9us91"]
+#Address="111.67.545.211:8283"
+#API="jypdqxu.5453:443"
+#Cookie=["af5u2o28o7ae9jrpr586l6d3bu"]
+
+Address="47.45.54.40:8282"
+API="hb.rw.cn"
+Cookie=["sbocci675msd5hlpo51qq1aihj"]
+Mode=0    # 1:websocket  0:http loop
 
 #[[Cookies]]
-#Address="111.67.205.xx:8283"
+#Address="111.67.205.34:8283"
 #API="aip.abc.com"
 #Cookie=["abc","asdfasdf"]
-#
+# Mode=1    # 1:websocket  0:http loop
 
 [MysqlDB]
-Host = '103.34.43.234:3306'
+Host = '103.3.31.33:3306'
 User = 'root'
-Password = '3434434'
+Password = '5345'
 DBName = 'hongbao'
